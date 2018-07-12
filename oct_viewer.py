@@ -63,6 +63,7 @@ class OCTViewer(object):
         return [fn for fn in glob(inpath)]
 
     def load_cube(self):
+        assert self.cubepaths, "No cubes found! Correct data path?"
         path = self.cubepaths[self.cubeidx]
         name = op.basename(path).replace('.npy', '')
         self.fig.suptitle(name)
