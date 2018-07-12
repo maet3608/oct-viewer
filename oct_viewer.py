@@ -162,6 +162,5 @@ class OCTViewer(object):
 
 if __name__ == '__main__':
     datapath = '.' if len(sys.argv) < 2 else sys.argv[1]
-    #datapath = r"c:\Maet\Data\NYU\cam_browser\highres"
     viewer = OCTViewer(datapath)
     viewer.run()
