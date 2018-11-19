@@ -1,6 +1,7 @@
 # oct-viewer
 
-A simple viewer for Optical Coherence Tomography (OCT) volumes.
+A simple viewer for Optical Coherence Tomography (OCT) volumes 
+([Github repo](https://github.com/maet3608/oct-viewer)).
 
 ![UI](https://github.com/maet3608/oct-viewer/blob/master/ui.png)
 
@@ -9,6 +10,14 @@ A simple viewer for Optical Coherence Tomography (OCT) volumes.
 
 ```
 python oct_viewer.py <datadir>
+```
+
+
+## Example
+
+```
+cd oct-viewer
+python oct_viewer.py data
 ```
 
 

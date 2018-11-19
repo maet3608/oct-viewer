@@ -22,6 +22,7 @@ class OCTViewer(object):
         self.cubeidx = 0
         self.cube_original = None
         self.cube = None
+        self.name = None
         self.x = None
         self.y = None
         self.z = None
@@ -65,8 +66,8 @@ class OCTViewer(object):
     def load_cube(self):
         assert self.cubepaths, "No cubes found! Correct data path?"
         path = self.cubepaths[self.cubeidx]
-        name = op.basename(path).replace('.npy', '')
-        self.fig.suptitle(name)
+        self.name = op.basename(path).replace('.npy', '')
+        self.fig.suptitle(self.name)
         self.cube_original = np.load(path)
         self.update_threshold(self.threshold, False)
 
@@ -86,7 +87,7 @@ class OCTViewer(object):
         xs, ys, zs = np.where(cube > threshold)
         colors = self.cube[cube > threshold] / 255.0
         self.plt4.scatter(zs, ys, xs, c=colors,
-                         marker='.', alpha=0.3, linewidth=0.0)
+                          marker='.', alpha=0.3, linewidth=0.0)
 
     def show_scans(self):
         self.init_cursor()
@@ -112,6 +113,10 @@ class OCTViewer(object):
 
         self.fig.canvas.draw_idle()
 
+    def save_scan(self):
+        filename = 'bscan-' + self.name + ".jpg"
+        plt.imsave(filename, self.cube[:, :, self.y], dpi=600)
+
     def next_cube(self, event=None):
         self.cubeidx = min(self.cubeidx + 1, len(self.cubepaths) - 1)
         self.load_cube()
@@ -129,6 +134,8 @@ class OCTViewer(object):
             self.next_cube()
         if event.key == 'left':
             self.prev_cube()
+        if event.key == 's':
+            self.save_scan()
 
     def on_hover(self, event):
         if event.button != 1:  # left mouse button
@@ -148,7 +155,7 @@ class OCTViewer(object):
         self.cube = self.cube_original.copy()
         if self.threshold < 255:
             self.cube[:, :, :, 0] = 0
-            threshold = self.threshold/255.0 * np.max(self.cube)
+            threshold = self.threshold / 255.0 * np.max(self.cube)
             self.cube[self.cube > threshold] = 255
         if redraw:
             self.show_scans()
@@ -162,6 +169,5 @@ class OCTViewer(object):
 
 if __name__ == '__main__':
     datapath = '.' if len(sys.argv) < 2 else sys.argv[1]
-    #datapath = r"c:\Maet\Data\NYU\cam_browser\highres"
     viewer = OCTViewer(datapath)
     viewer.run()
